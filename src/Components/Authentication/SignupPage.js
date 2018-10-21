@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import firebase from "firebase";
 import SocialAuth from "./SocialAuthentication/SocialAuth";
+//import ExtraInformation from "../Information/ExtraInformation";
 
 const SignupPage = ({ history }) => (
   <div>
@@ -18,6 +19,7 @@ const SignupPage = ({ history }) => (
         <SocialAuth />
       </div>
     </div>
+    {/* <ExtraInformation email={this.state.email} /> */}
   </div>
 );
 
@@ -54,18 +56,64 @@ class SignUpForm extends Component {
 
   onSubmit = event => {
     event.preventDefault();
-    const { email, passwordOne } = this.state;
+    const { email, passwordOne, username } = this.state;
+    console.log(email);
     const { history } = this.props;
+
     firebase
       .auth()
       .createUserWithEmailAndPassword(email, passwordOne)
-      .then(() => {
+      .then(authUser => {
         this.setState({ ...Initial_state });
-        history.push("/home");
-      })
-      .catch(error => this.setState(byPropKey("error", error)));
+        authUser.user.updateProfile({
+          displayName: username
+        });
+        history.push("/info");
+        //var user = firebase.auth().currentUser;
 
-    event.preventDefault();
+        // user
+        //   .sendEmailVerification()
+        //   .then(function() {
+        //     history.push("/info");
+        //   })
+        //   .catch(function(error) {
+        //     // An error happened.
+        //   });
+      })
+      // .then(function() {
+      //   user.updateProfile({
+      //     displayName: displayName
+      //   });
+      // })
+      .catch(error => this.setState(byPropKey("error", error)));
+    // .then(function(user) {
+    //   user.updateProfile({
+    //     displayName: name
+    //   });
+    // });
+
+    // firebase
+    //   .auth()
+    //   .createUserWithEmailAndPassword(email, passwordOne)
+    //   .then(() => {
+    //     firebase
+    //       .firestore()
+    //       .collection("users")
+    //       .add({
+    //         username: username,
+    //         email: email
+    //       })
+    //       .then(() => {
+    //         this.setState({ ...Initial_state });
+    //         history.push({
+    //           pathname: "/info"
+    //         });
+    //       })
+    //       .catch(error => this.setState(byPropKey("error", error)));
+    //   })
+    //   .catch(error => {
+    //     this.setState(byPropKey("error", error));
+    //   });
   };
 
   render() {
@@ -154,3 +202,13 @@ class SignUpForm extends Component {
 export default withRouter(SignupPage);
 
 export { SignUpForm };
+
+// firebase
+// .auth()
+// .createUserWithEmailAndPassword(email, passwordOne)
+// .then(() => {
+//   this.setState({ ...Initial_state });
+//   user = firebase.auth().currentUser;
+//   history.push("/info");
+//   user.sendEmailVerification();
+// })

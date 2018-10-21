@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { BrowserRouter, Route, Redirect } from "react-router-dom";
-// import { Redirect } from " react-router";
 import SigninPage from "./Authentication/SigninPage";
 import SignupPage from "./Authentication/SignupPage";
 import LandingPage from "./Authentication/LandingPage";

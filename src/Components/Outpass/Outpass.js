@@ -131,39 +131,41 @@ class Outpass extends Component {
           </div>
         </div>
 
-        <div class="container">
-          <div class="row">
-            <div class="col-md-8 m-auto">
-              <Link to="home" class=" backbtn btn btn-light">
+        <div className="container">
+          <div className="row">
+            <div className="col-md-8 m-auto">
+              <Link to="home" className=" backbtn btn btn-light">
                 Go Back
               </Link>
-              <h1 class="display-4 text-center">Fill Your Outpass</h1>
-              <p class="lead text-center">Easy way to submit your outpass </p>
+              <h1 className="display-4 text-center">Fill Your Outpass</h1>
+              <p className="lead text-center">
+                Easy way to submit your outpass{" "}
+              </p>
               <form onSubmit={this.handleSubmit}>
-                <div class="form-group">
+                <div className="form-group">
                   <input
                     type="text"
-                    class="form-control form-control-xs"
+                    className="form-control form-control-xs"
                     placeholder="* First Name"
                     onChange={this.onChange}
                     name="fname"
                     value={this.state.fname}
                   />
                 </div>
-                <div class="form-group">
+                <div className="form-group">
                   <input
                     type="text"
-                    class="form-control form-control-xs"
+                    className="form-control form-control-xs"
                     placeholder="* Last Name"
                     onChange={this.onChange}
                     name="lname"
                     value={this.state.lname}
                   />{" "}
                 </div>
-                <div class="form-group">
+                <div className="form-group">
                   <input
                     type="text"
-                    class="form-control form-control-xs"
+                    className="form-control form-control-xs"
                     placeholder="* USN"
                     onChange={this.onChange}
                     name="usn"
@@ -171,10 +173,10 @@ class Outpass extends Component {
                   />{" "}
                 </div>
 
-                <div class="form-group">
+                <div className="form-group">
                   <input
                     type="text"
-                    class="form-control form-control-xs"
+                    className="form-control form-control-xs"
                     placeholder="* Block"
                     onChange={this.onChange}
                     name="block"
@@ -182,10 +184,10 @@ class Outpass extends Component {
                   />{" "}
                 </div>
 
-                <div class="form-group">
+                <div className="form-group">
                   <input
                     type="text"
-                    class="form-control form-control-xs"
+                    className="form-control form-control-xs"
                     placeholder="* Room No"
                     onChange={this.onChange}
                     name="room"
@@ -193,10 +195,10 @@ class Outpass extends Component {
                   />
                 </div>
                 <h6>Out Date</h6>
-                <div class="form-group">
+                <div className="form-group">
                   <input
                     type="date"
-                    class="form-control form-control-xs"
+                    className="form-control form-control-xs"
                     placeholder="Outdate"
                     onChange={this.onChange}
                     name="outdate"
@@ -204,10 +206,10 @@ class Outpass extends Component {
                   />
                 </div>
                 <h6>In Date</h6>
-                <div class="form-group">
+                <div className="form-group">
                   <input
                     type="date"
-                    class="form-control form-control-xs"
+                    className="form-control form-control-xs"
                     placeholder="Indate"
                     onChange={this.onChange}
                     name="indate"
@@ -216,10 +218,10 @@ class Outpass extends Component {
                 </div>
                 <h6>Out Time</h6>
 
-                <div class="form-group">
+                <div className="form-group">
                   <input
                     type="time"
-                    class="form-control form-control-xs"
+                    className="form-control form-control-xs"
                     placeholder="Outtime"
                     onChange={this.onChange}
                     name="outtime"
@@ -228,10 +230,10 @@ class Outpass extends Component {
                 </div>
                 <h6>In Time</h6>
 
-                <div class="form-group">
+                <div className="form-group">
                   <input
                     type="time"
-                    class="form-control form-control-xs"
+                    className="form-control form-control-xs"
                     placeholder="Intime"
                     onChange={this.onChange}
                     name="intime"
@@ -239,9 +241,9 @@ class Outpass extends Component {
                   />
                 </div>
 
-                <div class="form-group">
+                <div className="form-group">
                   <textarea
-                    class="form-control form-control-xs"
+                    className="form-control form-control-xs"
                     placeholder="Purpose"
                     onChange={this.onChange}
                     name="purpose"
@@ -250,7 +252,7 @@ class Outpass extends Component {
                 </div>
                 <input
                   type="submit"
-                  class="btn btn-info btn-block mt-4"
+                  className="btn btn-info btn-block mt-4"
                   disabled={isInvalid}
                 />
               </form>

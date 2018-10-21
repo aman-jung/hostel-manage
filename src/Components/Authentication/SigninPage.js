@@ -27,19 +27,6 @@ class SignInForm extends Component {
     this.state = { ...INITIAL_STATE };
   }
 
-  // componentDidMount() {
-  //   console.log(this.props.authUser);
-  //   if (this.props.authUser) {
-  //     this.props.history.push("/home");
-  //   }
-  // }
-
-  // componentWillReceiveProps(nextProps) {
-  //   console.log(nextProps.authUser);
-  //   if (nextProps.authUser) {
-  //     this.props.history.push("/home");
-  //   }
-  // }
   onSubmit = event => {
     const { email, password } = this.state;
 

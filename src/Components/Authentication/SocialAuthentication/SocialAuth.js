@@ -14,7 +14,7 @@ class SocialAuth extends Component {
       firebase.auth.FacebookAuthProvider.PROVIDER_ID
     ],
     callbacks: {
-      signInSuccess: () => this.props.history.push("/home")
+      signInSuccess: () => this.props.history.push("/info")
     }
   };
   render() {
