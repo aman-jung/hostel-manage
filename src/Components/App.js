@@ -10,6 +10,8 @@ import Feeds from "./Feeds/Feeds";
 import PasswordForgetPage from "./Authentication/PasswordForgetPage";
 import ExtraInformation from "./Information/ExtraInformation";
 import firebase from "firebase";
+import Warden from "./Warden/Warden";
+import Status from "./Warden/Status";
 
 class App extends Component {
   constructor(props) {
@@ -22,9 +24,11 @@ class App extends Component {
 
   componentDidMount() {
     firebase.auth().onAuthStateChanged(authUser => {
-      authUser
-        ? this.setState({ authUser })
-        : this.setState({ authUser: null });
+      if (authUser) {
+        this.setState({ authUser });
+      } else {
+        this.setState({ authUser: null });
+      }
     });
   }
 
@@ -64,6 +68,8 @@ class App extends Component {
           <Route exact path="/Feeds" component={Feeds} />
           <Route exact path="/info" component={ExtraInformation} />
           <Route exact path="/pw-forget" component={PasswordForgetPage} />
+          <Route exact path="/warden" component={Warden} />
+          <Route exact path="/status" component={Status} />
         </div>
       </BrowserRouter>
     );

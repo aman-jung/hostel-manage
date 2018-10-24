@@ -1,15 +1,14 @@
 import React, { Component } from "react";
 import firebase from "firebase";
 import { withRouter } from "react-router-dom";
-//import "firebase/stor";
 
 const Initial_state = {
   username: "",
   email: "",
-  roomNumber: "",
+  usn: "",
+  image: "",
   block: "",
-  image: ""
-  //progress: 0
+  roomNo: ""
 };
 
 const byPropKey = (propertyName, value) => () => ({
@@ -27,9 +26,8 @@ class ExtraInformation extends Component {
   };
 
   onSubmit = event => {
-    //var uploader = document.getElementById("uploader");
     event.preventDefault();
-    const { email, roomNumber, image } = this.state;
+    const { usn, image, block, roomNo, email } = this.state;
     const { history } = this.props;
     var user = firebase.auth().currentUser;
     firebase
@@ -37,8 +35,10 @@ class ExtraInformation extends Component {
       .collection("Details")
       .add({
         username: user.displayName,
+        usn: usn,
         email: user.email,
-        roomNumber: roomNumber
+        block: block,
+        roomNo: roomNo
       })
       .then(() => {
         this.setState({ ...Initial_state });
@@ -47,29 +47,26 @@ class ExtraInformation extends Component {
       .catch(error => this.setState(byPropKey("error", error)));
 
     var storageRef = firebase.storage().ref(`Photos ${image.name}`);
-    // var task =
     storageRef.put(image);
-    // task.on(
-    //   "state_changed",
-    //   function progress(snapshot) {
-    //     var percentage =
-    //       (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-    //     uploader.value = percentage;
-    //   },
-    //   function error(err) {}
-    // );
   };
 
   render() {
-    const { roomNumber, image } = this.state;
+    const { usn, image, block, roomNo } = this.state;
     var user = firebase.auth().currentUser;
-    const isInvalid = roomNumber == "" || image == "";
+    console.log(user);
+
+    const isInvalid = usn == "" || image == "";
     return (
       <div className="register">
         <div className="container">
           <div className="row">
             <div className="col-md-8 m-auto">
-              <h1 className="display-4 text-center">Students Details</h1>
+              <h1 className="display-4 text-center">
+                Hey{" "}
+                <h1 style={{ marginLeft: "10px" }}>
+                  {user ? user.displayName : ""}
+                </h1>
+              </h1>
               <p className="lead text-center">We're almost done!!</p>
               <form onSubmit={this.onSubmit}>
                 <div className="form-group">
@@ -93,12 +90,36 @@ class ExtraInformation extends Component {
                 <div className="form-group">
                   <input
                     className="form-control form-control-lg"
-                    placeholder="Room Number"
-                    name="roomNumber"
-                    type="number"
-                    value={roomNumber}
+                    placeholder="usn"
+                    name="usn"
+                    type="text"
+                    value={usn}
                     onChange={event =>
-                      this.setState(byPropKey("roomNumber", event.target.value))
+                      this.setState(byPropKey("usn", event.target.value))
+                    }
+                  />
+                </div>
+                <div className="form-group">
+                  <input
+                    className="form-control form-control-lg"
+                    placeholder="Room Number"
+                    name="roomNo"
+                    type="text"
+                    value={roomNo}
+                    onChange={event =>
+                      this.setState(byPropKey("roomNo", event.target.value))
+                    }
+                  />
+                </div>
+                <div className="form-group">
+                  <input
+                    className="form-control form-control-lg"
+                    placeholder="block"
+                    name="block"
+                    type="text"
+                    value={block}
+                    onChange={event =>
+                      this.setState(byPropKey("block", event.target.value))
                     }
                   />
                 </div>
@@ -110,10 +131,7 @@ class ExtraInformation extends Component {
                     name={image}
                     type="file"
                     onChange={this.handleChange}
-                    // value={roomNumber}
-                    // onChange={event =>
-                    //   this.setState(byPropKey("photoUrl", event.target.files))
-                    // }
+                    required
                   />
                 </div>
                 <input

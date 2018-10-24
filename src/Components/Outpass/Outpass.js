@@ -1,7 +1,9 @@
 import React, { Component } from "react";
+// import "./App.css";
 import { Link } from "react-router-dom";
 import firebase from "firebase";
-var config = {
+
+const config = {
   apiKey: "AIzaSyAfYCHmHZMw-xC0I9NsU2pxlYRW83GgYmM",
   authDomain: "auth-7f72c.firebaseapp.com",
   databaseURL: "https://auth-7f72c.firebaseio.com",
@@ -10,93 +12,129 @@ var config = {
   messagingSenderId: "356229365648"
 };
 firebase.initializeApp(config);
-
-var outpassSubmitRef = firebase.database().ref("outpassSubmit");
+var db = firebase.firestore();
+var outpassSubmitRef = db.collection("outpassSubmit");
+var permission1 = db.collection("permission");
 
 class Outpass extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      fname: "",
-      lname: "",
-      usn: "",
-      room: "",
-      block: "",
       purpose: "",
       indate: "",
       outdate: "",
       intime: "",
-      outtime: ""
+      outtime: "",
+      status: "",
+      data: []
     };
   }
 
   onChange = e => {
     e.preventDefault();
     this.setState({ [e.target.name]: e.target.value });
-    console.log(e.target.name);
+    // console.log(e.target.name);
   };
 
   handleSubmit = e => {
     e.preventDefault();
     e.target.reset();
-    var data = {
-      fname: this.state.fname,
-      lname: this.state.lname,
-      usn: this.state.usn,
-      room: this.state.room,
-      block: this.state.block,
+    var newoutpassSubmitRef = outpassSubmitRef;
+    newoutpassSubmitRef.add({
+      username: this.state.data.username,
+      usn: this.state.data.usn,
+      room: this.state.data.roomNo,
+      block: this.state.data.block,
       purpose: this.state.purpose,
       indate: this.state.indate,
       outdate: this.state.outdate,
       intime: this.state.intime,
-      outtime: this.state.outtime
-    };
+      outtime: this.state.outtime,
+      status: "Pending",
+      comment: ""
+    });
 
-    console.log(data);
-    var newoutpassSubmitRef = outpassSubmitRef.push();
-    newoutpassSubmitRef.set({
-      data: data
+    permission1.add({
+      username: this.state.data.username,
+      usn: this.state.data.usn,
+      room: this.state.data.roomNo,
+      block: this.state.data.block,
+      purpose: this.state.purpose,
+      indate: this.state.indate,
+      outdate: this.state.outdate,
+      intime: this.state.intime,
+      outtime: this.state.outtime,
+      status: "Pending",
+      comment: ""
     });
     this.setState({
-      fname: "",
-      lname: "",
-      usn: "",
-      room: "",
-      block: "",
       purpose: "",
       indate: "",
       outdate: "",
       intime: "",
-      outtime: ""
+      outtime: "",
+      status: "Pending"
     });
   };
 
   render() {
-    const {
-      fname,
-      lname,
-      usn,
-      room,
-      block,
-      purpose,
-      indate,
-      outdate,
-      intime,
-      outtime
-    } = this.state;
-    const isInvalid =
-      fname == "" ||
-      lname == "" ||
-      usn == "" ||
-      room == "" ||
-      block == "" ||
-      purpose == "" ||
-      indate == "" ||
-      outdate == "" ||
-      intime == "" ||
-      outtime == "";
+    var scope = this;
+    var value;
+    var db = firebase.firestore();
+    var current = firebase.auth().currentUser;
+    // console.log(current);
+    var uid1 = "";
+    if (current) {
+      uid1 = current.email;
+      //console.log(uid1);
+    } else {
+      //console.log("data empty");
+    }
+
+    db.collection("Details")
+      .where("email", "==", uid1)
+      .get()
+      .then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+          //console.log(doc.id, " => ", doc.data());
+          //value = doc.data();
+          //console.log(value);
+
+          scope.setState({
+            data: doc.data()
+          });
+        });
+      })
+      .catch(err => {
+        console.log("Error getting documents", err);
+      });
+    //console.log(this.state.data);
     return (
       <div>
+        <div className="nav">
+          <div className="nav-element">
+            <div className="nav-element1">
+              <Link to="home">
+                <img
+                  src={require("../../img/ustech1.png")}
+                  alt="banner"
+                  height="80"
+                  width="80"
+                />
+              </Link>
+            </div>
+            <div className="nav-element2" />
+            <div className="nav-element3">
+              <div className="nav-element3-1">
+                <div class="dropdown-content">
+                  <hr />
+                </div>
+              </div>
+              <div className="nav-element3-2" />
+            </div>
+          </div>
+        </div>
+
         <div className="main">
           <div>
             <Link to="#">
@@ -131,74 +169,58 @@ class Outpass extends Component {
           </div>
         </div>
 
-        <div className="container">
-          <div className="row">
-            <div className="col-md-8 m-auto">
-              <Link to="home" className=" backbtn btn btn-light">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-8 m-auto">
+              <Link to="home" class=" backbtn btn btn-light">
                 Go Back
               </Link>
-              <h1 className="display-4 text-center">Fill Your Outpass</h1>
-              <p className="lead text-center">
-                Easy way to submit your outpass{" "}
-              </p>
+              <h1 class="display-4 text-center">Fill Your Outpass</h1>
+              <p class="lead text-center">Easy way to submit your outpass </p>
               <form onSubmit={this.handleSubmit}>
-                <div className="form-group">
+                <div class="form-group">
                   <input
                     type="text"
-                    className="form-control form-control-xs"
-                    placeholder="* First Name"
-                    onChange={this.onChange}
-                    name="fname"
-                    value={this.state.fname}
+                    class="form-control form-control-xs"
+                    //placeholder="* First Name"
+                    //onChange={this.onChange}
+                    name={this.state.data.username}
+                    value={this.state.data.username}
                   />
                 </div>
-                <div className="form-group">
-                  <input
-                    type="text"
-                    className="form-control form-control-xs"
-                    placeholder="* Last Name"
-                    onChange={this.onChange}
-                    name="lname"
-                    value={this.state.lname}
-                  />{" "}
-                </div>
-                <div className="form-group">
-                  <input
-                    type="text"
-                    className="form-control form-control-xs"
-                    placeholder="* USN"
-                    onChange={this.onChange}
-                    name="usn"
-                    value={this.state.usn}
-                  />{" "}
-                </div>
 
-                <div className="form-group">
+                <div class="form-group">
                   <input
                     type="text"
-                    className="form-control form-control-xs"
-                    placeholder="* Block"
-                    onChange={this.onChange}
-                    name="block"
-                    value={this.state.block}
+                    class="form-control form-control-xs"
+                    // placeholder="* USN"
+                    name={this.state.data.usn}
+                    value={this.state.data.usn}
                   />{" "}
                 </div>
-
-                <div className="form-group">
+                <div class="form-group">
                   <input
                     type="text"
-                    className="form-control form-control-xs"
-                    placeholder="* Room No"
-                    onChange={this.onChange}
-                    name="room"
-                    value={this.state.room}
+                    class="form-control form-control-xs"
+                    // placeholder="* Block"
+                    name={this.state.data.block}
+                    value={this.state.data.block}
+                  />{" "}
+                </div>
+                <div class="form-group">
+                  <input
+                    type="text"
+                    class="form-control form-control-xs"
+                    // placeholder="* Room No"
+                    name={this.state.data.roomNo}
+                    value={this.state.data.roomNo}
                   />
                 </div>
                 <h6>Out Date</h6>
-                <div className="form-group">
+                <div class="form-group">
                   <input
                     type="date"
-                    className="form-control form-control-xs"
+                    class="form-control form-control-xs"
                     placeholder="Outdate"
                     onChange={this.onChange}
                     name="outdate"
@@ -206,10 +228,10 @@ class Outpass extends Component {
                   />
                 </div>
                 <h6>In Date</h6>
-                <div className="form-group">
+                <div class="form-group">
                   <input
                     type="date"
-                    className="form-control form-control-xs"
+                    class="form-control form-control-xs"
                     placeholder="Indate"
                     onChange={this.onChange}
                     name="indate"
@@ -218,10 +240,10 @@ class Outpass extends Component {
                 </div>
                 <h6>Out Time</h6>
 
-                <div className="form-group">
+                <div class="form-group">
                   <input
                     type="time"
-                    className="form-control form-control-xs"
+                    class="form-control form-control-xs"
                     placeholder="Outtime"
                     onChange={this.onChange}
                     name="outtime"
@@ -230,10 +252,10 @@ class Outpass extends Component {
                 </div>
                 <h6>In Time</h6>
 
-                <div className="form-group">
+                <div class="form-group">
                   <input
                     type="time"
-                    className="form-control form-control-xs"
+                    class="form-control form-control-xs"
                     placeholder="Intime"
                     onChange={this.onChange}
                     name="intime"
@@ -241,20 +263,16 @@ class Outpass extends Component {
                   />
                 </div>
 
-                <div className="form-group">
+                <div class="form-group">
                   <textarea
-                    className="form-control form-control-xs"
+                    class="form-control form-control-xs"
                     placeholder="Purpose"
                     onChange={this.onChange}
                     name="purpose"
                     value={this.state.purpose}
                   />
                 </div>
-                <input
-                  type="submit"
-                  className="btn btn-info btn-block mt-4"
-                  disabled={isInvalid}
-                />
+                <input type="submit" class="btn btn-info btn-block mt-4" />
               </form>
             </div>
           </div>

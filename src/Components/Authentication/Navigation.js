@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import SignOutButton from "./SignOutButton";
 
 const Navigation = ({ authUser }) => (
+  // console.log(authUser),
+
   <div>{authUser ? <NavigationAuth /> : <NavigationNonAuth />}</div>
 );
 const NavigationAuth = () => (

@@ -40,19 +40,6 @@ class SignUpForm extends Component {
     super(props);
     this.state = { ...Initial_state };
   }
-  // componentDidMount() {
-  //   console.log(this.props.authUser);
-  //   if (this.props.authUser) {
-  //     this.props.history.push("/home");
-  //   }
-  // }
-
-  // componentWillReceiveProps(nextProps) {
-  //   console.log(nextProps.authUser);
-  //   if (nextProps.authUser) {
-  //     this.props.history.push("/home");
-  //   }
-  // }
 
   onSubmit = event => {
     event.preventDefault();
@@ -65,55 +52,30 @@ class SignUpForm extends Component {
       .createUserWithEmailAndPassword(email, passwordOne)
       .then(authUser => {
         this.setState({ ...Initial_state });
-        authUser.user.updateProfile({
-          displayName: username
-        });
-        history.push("/info");
-        //var user = firebase.auth().currentUser;
+        authUser.user
+          .updateProfile({
+            displayName: username
+          })
+          .then(() => {
+            history.push("/info");
+          })
+          .catch(error => {
+            console.log(error);
+          });
 
-        // user
-        //   .sendEmailVerification()
-        //   .then(function() {
-        //     history.push("/info");
-        //   })
-        //   .catch(function(error) {
-        //     // An error happened.
-        //   });
+        var user = firebase.auth().currentUser;
+
+        user
+          .sendEmailVerification()
+          .then(function() {
+            window.alert("Verification Sent to your link");
+          })
+          .catch(function(error) {
+            window.alert("Error", +error.message);
+          });
       })
-      // .then(function() {
-      //   user.updateProfile({
-      //     displayName: displayName
-      //   });
-      // })
-      .catch(error => this.setState(byPropKey("error", error)));
-    // .then(function(user) {
-    //   user.updateProfile({
-    //     displayName: name
-    //   });
-    // });
 
-    // firebase
-    //   .auth()
-    //   .createUserWithEmailAndPassword(email, passwordOne)
-    //   .then(() => {
-    //     firebase
-    //       .firestore()
-    //       .collection("users")
-    //       .add({
-    //         username: username,
-    //         email: email
-    //       })
-    //       .then(() => {
-    //         this.setState({ ...Initial_state });
-    //         history.push({
-    //           pathname: "/info"
-    //         });
-    //       })
-    //       .catch(error => this.setState(byPropKey("error", error)));
-    //   })
-    //   .catch(error => {
-    //     this.setState(byPropKey("error", error));
-    //   });
+      .catch(error => this.setState(byPropKey("error", error)));
   };
 
   render() {
@@ -134,7 +96,7 @@ class SignUpForm extends Component {
                   <input
                     type="text"
                     className="form-control form-control-lg"
-                    placeholder="Name"
+                    placeholder="Full Name"
                     name="username"
                     value={username}
                     onChange={event =>
@@ -212,3 +174,32 @@ export { SignUpForm };
 //   history.push("/info");
 //   user.sendEmailVerification();
 // })
+
+// .then(function(user) {
+//   user.updateProfile({
+//     displayName: name
+//   });
+// });
+
+// firebase
+//   .auth()
+//   .createUserWithEmailAndPassword(email, passwordOne)
+//   .then(() => {
+//     firebase
+//       .firestore()
+//       .collection("users")
+//       .add({
+//         username: username,
+//         email: email
+//       })
+//       .then(() => {
+//         this.setState({ ...Initial_state });
+//         history.push({
+//           pathname: "/info"
+//         });
+//       })
+//       .catch(error => this.setState(byPropKey("error", error)));
+//   })
+//   .catch(error => {
+//     this.setState(byPropKey("error", error));
+//   });

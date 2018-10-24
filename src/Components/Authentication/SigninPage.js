@@ -29,6 +29,10 @@ class SignInForm extends Component {
 
   onSubmit = event => {
     const { email, password } = this.state;
+    var user = firebase.auth().currentUser;
+    //var emailVerified = user.emailVerified;
+    //const emailVerified = user.emailVerified;
+    console.log(user);
 
     const { history } = this.props;
 
@@ -36,12 +40,47 @@ class SignInForm extends Component {
       .auth()
       .signInWithEmailAndPassword(email, password)
       .then(() => {
-        this.setState({ ...INITIAL_STATE });
-        history.push("/home");
+        if (email == "raunka@raunak.com") {
+          this.setState({ ...INITIAL_STATE });
+
+          history.push("/Warden");
+        } else {
+          this.setState({ ...INITIAL_STATE });
+
+          history.push("/home");
+        }
       })
       .catch(error => {
         this.setState(byPropKey("error", error));
       });
+
+    // var user = firebase.auth().currentUser;
+
+    // user
+    //   .sendEmailVerification()
+    //   .then(function() {
+    //     // E
+    //   })
+    //   .catch(function(error) {
+    //     // An error happened.
+    //   });
+
+    // firebase.auth().onAuthStateChanged(function(user) {
+    //   if (user) {
+    //     if (user.emailVerified === false) {
+    //       console.log("Sry");
+    //       // Toast.show({
+    //       //   text: "Email Not Verified!",
+    //       //   position: "bottom",
+    //       //   buttonText: "Try Again"
+    //       // });
+    //     } else {
+    //       // successful login
+    //     }
+    //   } else {
+    //
+    //   }
+    // });
 
     event.preventDefault();
   };
