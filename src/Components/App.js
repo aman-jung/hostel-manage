@@ -38,11 +38,6 @@ class App extends Component {
       <BrowserRouter>
         <div>
           <Navigation authUser={this.state.authUser} />
-          {/* <Route
-            exact
-            path="/signup"
-            render={() => <SignupPage authUser={this.state.authUser} />}
-          /> */}
           <Route
             exact
             path="/signup"
@@ -50,11 +45,6 @@ class App extends Component {
               this.state.authUser ? <Redirect to="/home" /> : <SignupPage />
             }
           />
-          {/* <Route
-            exact
-            path="/signin"
-            render={() => <SigninPage authUser={this.state.authUser} />}
-          /> */}
           <Route
             exact
             path="/signin"
