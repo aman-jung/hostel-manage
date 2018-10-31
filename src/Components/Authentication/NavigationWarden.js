@@ -9,7 +9,7 @@ const Navigation = ({ authUser }) => (
 const NavigationAuth = () => (
   <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
     <Link to="/home" className="navbar-brand">
-      Jain Hostel
+      Jain Hostel Warden
     </Link>
     <button
       className="navbar-toggler"
@@ -38,35 +38,23 @@ const NavigationAuth = () => (
     >
       <ul className="navbar-nav ml-auto">
         <li className="nav-item">
-          <Link className="nav-link" to="/outpass">
-            Outpass
+          <Link className="nav-link" to="/">
+            GO HOME WARDEN
           </Link>
         </li>
-        <li className="nav-item">
+        {/* <li className="nav-item">
           <Link className="nav-link" to="/Feeds">
             News Feeds
           </Link>
-        </li>
+        </li> */}
         <li className="nav-item">
-          <Link className="nav-link" to="/StudentStatus">
-            Status
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link className="nav-link" to="/StudentHistory">
-            History
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link to="/studentprofile">
-            <img
-              className="rounded-circle"
-              style={{ width: "35px", marginRight: "5px" }}
-              src="https://www.gravatar.com/avatar/anything?s=200&d=mm"
-              alt=""
-              title="You must have a Gravatar connected to your email to display an image"
-            />
-          </Link>
+          <img
+            className="rounded-circle"
+            style={{ width: "35px", marginRight: "5px" }}
+            src="https://www.gravatar.com/avatar/anything?s=200&d=mm"
+            alt=""
+            title="You must have a Gravatar connected to your email to display an image"
+          />
         </li>
         <li>
           <SignOutButton />

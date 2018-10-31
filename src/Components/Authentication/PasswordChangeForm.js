@@ -1,10 +1,6 @@
 import React, { Component } from "react";
 import firebase from "firebase";
 
-const byPropKey = (propertyName, value) => () => ({
-  [propertyName]: value
-});
-
 const INITIAL_STATE = {
   passwordOne: "",
   passwordTwo: "",
@@ -17,6 +13,9 @@ class PasswordChangeForm extends Component {
 
     this.state = { ...INITIAL_STATE };
   }
+  onChange = e => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
 
   onSubmit = event => {
     const { passwordOne } = this.state;
@@ -27,9 +26,7 @@ class PasswordChangeForm extends Component {
       .then(() => {
         this.setState({ ...INITIAL_STATE });
       })
-      .catch(error => {
-        this.setState(byPropKey("error", error));
-      });
+      .catch(error => this.setState({ error }));
 
     event.preventDefault();
   };
@@ -43,17 +40,13 @@ class PasswordChangeForm extends Component {
       <form onSubmit={this.onSubmit}>
         <input
           value={passwordOne}
-          onChange={event =>
-            this.setState(byPropKey("passwordOne", event.target.value))
-          }
+          onChange={this.onChange}
           type="password"
           placeholder="New Password"
         />
         <input
           value={passwordTwo}
-          onChange={event =>
-            this.setState(byPropKey("passwordTwo", event.target.value))
-          }
+          onChange={this.onChange}
           type="password"
           placeholder="Confirm New Password"
         />

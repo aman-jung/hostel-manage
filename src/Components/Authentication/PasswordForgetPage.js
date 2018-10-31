@@ -7,10 +7,6 @@ const PasswordForgetPage = () => (
   </div>
 );
 
-const byPropKey = (propertyName, value) => () => ({
-  [propertyName]: value
-});
-
 const INITIAL_STATE = {
   email: "",
   error: null
@@ -23,6 +19,9 @@ class PasswordForgetForm extends Component {
     this.state = { ...INITIAL_STATE };
   }
 
+  onChange = e => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
   onSubmit = event => {
     const { email } = this.state;
 
@@ -32,9 +31,7 @@ class PasswordForgetForm extends Component {
       .then(() => {
         this.setState({ ...INITIAL_STATE });
       })
-      .catch(error => {
-        this.setState(byPropKey("error", error));
-      });
+      .catch(error => this.setState({ error }));
 
     event.preventDefault();
   };
@@ -58,9 +55,7 @@ class PasswordForgetForm extends Component {
                     placeholder="Email Address"
                     name="email"
                     value={this.state.email}
-                    onChange={event =>
-                      this.setState(byPropKey("email", event.target.value))
-                    }
+                    onChange={this.onChange}
                   />
                 </div>
 

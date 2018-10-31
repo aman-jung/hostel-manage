@@ -8,7 +8,7 @@ img {
 
 .landing {
   position: relative;
-  background: url("../img/showcase.jpg") no-repeat;
+  background: url("../img/100.jpg") no-repeat;
   background-size: cover;
   background-position: center;
   height: 100vh;
@@ -193,8 +193,8 @@ img {
   border-radius: 50px;
   transition: 0.5s;
   margin: 2px 4px;
-  color: black;
-  background: #f9ce00;
+  color: white;
+  background: #343a40;
 }
 .btn {
   text-align: center;

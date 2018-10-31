@@ -23,10 +23,6 @@ const SignupPage = ({ history }) => (
   </div>
 );
 
-const byPropKey = (propertyName, value) => () => ({
-  [propertyName]: value
-});
-
 const Initial_state = {
   username: "",
   email: "",
@@ -41,6 +37,9 @@ class SignUpForm extends Component {
     this.state = { ...Initial_state };
   }
 
+  onChange = e => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
   onSubmit = event => {
     event.preventDefault();
     const { email, passwordOne, username } = this.state;
@@ -75,7 +74,7 @@ class SignUpForm extends Component {
           });
       })
 
-      .catch(error => this.setState(byPropKey("error", error)));
+      .catch(error => this.setState({ error }));
   };
 
   render() {
@@ -99,9 +98,7 @@ class SignUpForm extends Component {
                     placeholder="Full Name"
                     name="username"
                     value={username}
-                    onChange={event =>
-                      this.setState(byPropKey("username", event.target.value))
-                    }
+                    onChange={this.onChange}
                   />
                 </div>
                 <div className="form-group">
@@ -111,9 +108,7 @@ class SignUpForm extends Component {
                     placeholder="Email Address"
                     name="email"
                     value={email}
-                    onChange={event =>
-                      this.setState(byPropKey("email", event.target.value))
-                    }
+                    onChange={this.onChange}
                   />
                 </div>
 
@@ -124,11 +119,7 @@ class SignUpForm extends Component {
                     placeholder="Password"
                     name="passwordOne"
                     value={passwordOne}
-                    onChange={event =>
-                      this.setState(
-                        byPropKey("passwordOne", event.target.value)
-                      )
-                    }
+                    onChange={this.onChange}
                   />
                 </div>
                 <div className="form-group">
@@ -138,11 +129,7 @@ class SignUpForm extends Component {
                     name="passwordTwo"
                     type="password"
                     value={passwordTwo}
-                    onChange={event =>
-                      this.setState(
-                        byPropKey("passwordTwo", event.target.value)
-                      )
-                    }
+                    onChange={this.onChange}
                   />
                 </div>
 
@@ -164,42 +151,3 @@ class SignUpForm extends Component {
 export default withRouter(SignupPage);
 
 export { SignUpForm };
-
-// firebase
-// .auth()
-// .createUserWithEmailAndPassword(email, passwordOne)
-// .then(() => {
-//   this.setState({ ...Initial_state });
-//   user = firebase.auth().currentUser;
-//   history.push("/info");
-//   user.sendEmailVerification();
-// })
-
-// .then(function(user) {
-//   user.updateProfile({
-//     displayName: name
-//   });
-// });
-
-// firebase
-//   .auth()
-//   .createUserWithEmailAndPassword(email, passwordOne)
-//   .then(() => {
-//     firebase
-//       .firestore()
-//       .collection("users")
-//       .add({
-//         username: username,
-//         email: email
-//       })
-//       .then(() => {
-//         this.setState({ ...Initial_state });
-//         history.push({
-//           pathname: "/info"
-//         });
-//       })
-//       .catch(error => this.setState(byPropKey("error", error)));
-//   })
-//   .catch(error => {
-//     this.setState(byPropKey("error", error));
-//   });

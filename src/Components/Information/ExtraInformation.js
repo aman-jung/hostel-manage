@@ -8,12 +8,11 @@ const Initial_state = {
   usn: "",
   image: "",
   block: "",
-  roomNo: ""
+  roomNo: "",
+  error: ""
 };
 
-const byPropKey = (propertyName, value) => () => ({
-  [propertyName]: value
-});
+var db = firebase.firestore();
 
 class ExtraInformation extends Component {
   state = {
@@ -24,38 +23,73 @@ class ExtraInformation extends Component {
     const image = e.target.files[0];
     this.setState({ image });
   };
+  onChange = e => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
 
   onSubmit = event => {
     event.preventDefault();
-    const { usn, image, block, roomNo, email } = this.state;
+    var scope = this;
+    const { usn, image, block, roomNo } = this.state;
     const { history } = this.props;
     var user = firebase.auth().currentUser;
-    firebase
-      .firestore()
-      .collection("Details")
-      .add({
-        username: user.displayName,
-        usn: usn,
-        email: user.email,
-        block: block,
-        roomNo: roomNo
-      })
-      .then(() => {
-        this.setState({ ...Initial_state });
-        history.push("/home");
-      })
-      .catch(error => this.setState(byPropKey("error", error)));
+    var value = "";
+    console.log(user.emailVerified);
 
-    var storageRef = firebase.storage().ref(`Photos ${image.name}`);
-    storageRef.put(image);
+    db.collection("Details")
+      .where("usn", "==", usn)
+      .get()
+      .then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+          console.log(doc.id, " => ", doc.data());
+          value = doc.data();
+        });
+        if (!value.usn) {
+          if (user.emailVerified) {
+            firebase
+              .firestore()
+              .collection("Details")
+              // .orderBy("", timestamp)
+              .add({
+                username: user.displayName,
+                usn: usn,
+                email: user.email,
+                block: block,
+                roomNo: roomNo
+              })
+              .then(() => {
+                scope.setState({ ...Initial_state });
+                history.push("/home");
+              })
+              .catch(err => {
+                console.log("Error getting documents", err);
+              });
+
+            var storageRef = firebase.storage().ref(`Photos ${image.name}`);
+            storageRef.put(image);
+          } else {
+            user
+              .sendEmailVerification()
+              .then(function() {
+                window.alert("Verification Sent to your link");
+              })
+              .catch(function(error) {
+                window.alert("Error", +error.message);
+              });
+          }
+        } else {
+          alert("usn is already used");
+        }
+      });
   };
 
   render() {
     const { usn, image, block, roomNo } = this.state;
-    var user = firebase.auth().currentUser;
-    console.log(user);
 
-    const isInvalid = usn == "" || image == "";
+    var user = firebase.auth().currentUser;
+    //console.log(user);
+
+    const isInvalid = usn === "" || image === "";
     return (
       <div className="register">
         <div className="container">
@@ -94,9 +128,7 @@ class ExtraInformation extends Component {
                     name="usn"
                     type="text"
                     value={usn}
-                    onChange={event =>
-                      this.setState(byPropKey("usn", event.target.value))
-                    }
+                    onChange={this.onChange}
                   />
                 </div>
                 <div className="form-group">
@@ -106,9 +138,7 @@ class ExtraInformation extends Component {
                     name="roomNo"
                     type="text"
                     value={roomNo}
-                    onChange={event =>
-                      this.setState(byPropKey("roomNo", event.target.value))
-                    }
+                    onChange={this.onChange}
                   />
                 </div>
                 <div className="form-group">
@@ -118,9 +148,7 @@ class ExtraInformation extends Component {
                     name="block"
                     type="text"
                     value={block}
-                    onChange={event =>
-                      this.setState(byPropKey("block", event.target.value))
-                    }
+                    onChange={this.onChange}
                   />
                 </div>
 

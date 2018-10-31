@@ -13,9 +13,10 @@ const config = {
 };
 firebase.initializeApp(config);
 var db = firebase.firestore();
-var outpassSubmitRef = db.collection("outpassSubmit");
-var permission1 = db.collection("permission");
-
+const messaging = firebase.messaging();
+messaging.usePublicVapidKey(
+  "BD3GfKjHVOXpFwb2gBOmSgrhL-XCNdzfGArgsidVNHM0TloXMCEub7qoyKZp1SDoDS026m8jlCTmoxtQDGsjn_s"
+);
 class Outpass extends Component {
   constructor(props) {
     super(props);
@@ -26,7 +27,10 @@ class Outpass extends Component {
       intime: "",
       outtime: "",
       status: "",
-      data: []
+      data: [],
+      more: [],
+      more1: [],
+      id: []
     };
   }
 
@@ -35,51 +39,198 @@ class Outpass extends Component {
     this.setState({ [e.target.name]: e.target.value });
     // console.log(e.target.name);
   };
+  componentDidMount() {
+    let scope = this;
+    db.collection("id")
+      .get()
+      .then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+          console.log(doc.id, " => ", doc.data());
+          scope.setState({
+            id: doc.data()
+          });
+          console.log(this.state.id);
+        });
+      })
+      .catch(err => {
+        console.log("Error getting documents", err);
+      });
+  }
 
   handleSubmit = e => {
+    var id1 = this.state.id.val;
+    var date = Date.now();
+    var datenew = new Intl.DateTimeFormat("en-US", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit"
+    }).format(date);
     e.preventDefault();
     e.target.reset();
-    var newoutpassSubmitRef = outpassSubmitRef;
-    newoutpassSubmitRef.add({
-      username: this.state.data.username,
-      usn: this.state.data.usn,
-      room: this.state.data.roomNo,
-      block: this.state.data.block,
-      purpose: this.state.purpose,
-      indate: this.state.indate,
-      outdate: this.state.outdate,
-      intime: this.state.intime,
-      outtime: this.state.outtime,
-      status: "Pending",
-      comment: ""
-    });
+    var value = "";
+    var value1 = "";
+    var scope1 = this;
+    var USN = "";
+    if (this.state.data) {
+      USN = this.state.data.usn;
+      console.log(USN);
+    } else {
+      //console.log("data empty");
+    }
 
-    permission1.add({
-      username: this.state.data.username,
-      usn: this.state.data.usn,
-      room: this.state.data.roomNo,
-      block: this.state.data.block,
-      purpose: this.state.purpose,
-      indate: this.state.indate,
-      outdate: this.state.outdate,
-      intime: this.state.intime,
-      outtime: this.state.outtime,
-      status: "Pending",
-      comment: ""
-    });
-    this.setState({
-      purpose: "",
-      indate: "",
-      outdate: "",
-      intime: "",
-      outtime: "",
-      status: "Pending"
-    });
+    db.collection("outpassSubmit")
+      .where("usn", "==", USN)
+      .get()
+      .then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+          console.log(doc.id, " => ", doc.data());
+          value = doc.data();
+        });
+        if (value.usn) {
+          alert("already submitted");
+        } else {
+          db.collection("outpassSubmit").add({
+            id: scope1.state.id.val,
+            username: scope1.state.data.username,
+            usn: scope1.state.data.usn,
+            room: scope1.state.data.roomNo,
+            block: scope1.state.data.block,
+            purpose: scope1.state.purpose,
+            indate: scope1.state.indate,
+            outdate: scope1.state.outdate,
+            intime: scope1.state.intime,
+            outtime: scope1.state.outtime,
+            status: "Pending",
+            comment: "",
+            createdate: datenew,
+            email: scope1.state.data.email
+          });
+
+          db.collection("permission").add({
+            id: scope1.state.id.val,
+            username: scope1.state.data.username,
+            usn: scope1.state.data.usn,
+            room: scope1.state.data.roomNo,
+            block: scope1.state.data.block,
+            purpose: scope1.state.purpose,
+            indate: scope1.state.indate,
+            outdate: scope1.state.outdate,
+            intime: scope1.state.intime,
+            outtime: scope1.state.outtime,
+            status: "Pending",
+            comment: "",
+            createdate: datenew,
+            email: scope1.state.data.email
+          });
+
+          db.collection("studentstatus")
+            .where("usn", "==", USN)
+            .get()
+            .then(function(querySnapshot) {
+              querySnapshot.forEach(function(doc) {
+                console.log(doc.id, " => ", doc.data());
+                value1 = doc.data();
+              });
+              if (value1.usn) {
+                console.log(scope1.state.purpose);
+                // alert("already submitted");
+                db.collection("studentstatus")
+                  .where("usn", "==", USN)
+                  .get()
+                  .then(
+                    function(querySnapshot) {
+                      querySnapshot.forEach(function(doc) {
+                        db.collection("studentstatus")
+                          .doc(doc.id)
+                          .update({
+                            id: scope1.state.id.val,
+                            username: scope1.state.data.username,
+                            usn: scope1.state.data.usn,
+                            room: scope1.state.data.roomNo,
+                            block: scope1.state.data.block,
+                            purpose: scope1.state.purpose,
+                            indate: scope1.state.indate,
+                            outdate: scope1.state.outdate,
+                            intime: scope1.state.intime,
+                            outtime: scope1.state.outtime,
+                            status: "Pending",
+                            comment: "",
+                            createdate: datenew,
+                            email: scope1.state.data.email
+                          });
+                      });
+                    },
+                    function() {
+                      db.collection("id")
+                        .get()
+                        .then(function(querySnapshot) {
+                          querySnapshot.forEach(function(doc) {
+                            db.collection("id")
+                              .doc(doc.id)
+                              .update({ val: id1 + 1 });
+                          });
+                        });
+
+                      scope1.setState({
+                        purpose: "",
+                        indate: "",
+                        outdate: "",
+                        intime: "",
+                        outtime: "",
+                        status: "Pending"
+                      });
+                    }
+                  );
+              } else {
+                db.collection("studentstatus").add({
+                  id: scope1.state.id.val,
+                  username: scope1.state.data.username,
+                  usn: scope1.state.data.usn,
+                  room: scope1.state.data.roomNo,
+                  block: scope1.state.data.block,
+                  purpose: scope1.state.purpose,
+                  indate: scope1.state.indate,
+                  outdate: scope1.state.outdate,
+                  intime: scope1.state.intime,
+                  outtime: scope1.state.outtime,
+                  status: "Pending",
+                  comment: "",
+                  createdate: datenew,
+                  email: scope1.state.data.email
+                });
+
+                db.collection("id")
+                  .get()
+                  .then(function(querySnapshot) {
+                    querySnapshot.forEach(function(doc) {
+                      db.collection("id")
+                        .doc(doc.id)
+                        .update({ val: id1 + 1 });
+                    });
+                  });
+
+                scope1.setState({
+                  purpose: "",
+                  indate: "",
+                  outdate: "",
+                  intime: "",
+                  outtime: "",
+                  status: "Pending"
+                });
+              }
+            });
+        }
+      })
+      .catch(err => {
+        console.log("Error getting documents", err);
+      });
   };
 
   render() {
     var scope = this;
-    var value;
     var db = firebase.firestore();
     var current = firebase.auth().currentUser;
     // console.log(current);
@@ -111,7 +262,7 @@ class Outpass extends Component {
     //console.log(this.state.data);
     return (
       <div>
-        <div className="nav">
+        {/* <div className="nav">
           <div className="nav-element">
             <div className="nav-element1">
               <Link to="home">
@@ -133,9 +284,9 @@ class Outpass extends Component {
               <div className="nav-element3-2" />
             </div>
           </div>
-        </div>
+        </div> */}
 
-        <div className="main">
+        {/* <div className="main">
           <div>
             <Link to="#">
               <img src={require("../../img/email (2).png")} alt="banner" />
@@ -167,7 +318,7 @@ class Outpass extends Component {
               <p className="elements">Sports</p>
             </Link>
           </div>
-        </div>
+        </div> */}
 
         <div class="container">
           <div class="row">

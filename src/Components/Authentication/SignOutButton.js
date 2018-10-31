@@ -7,7 +7,7 @@ const SignOutButton = () => (
   <Link to="/">
     <button
       type="button"
-      className="logout"
+      className="btn btn-outline-none my-2 my-sm-0"
       onClick={() => {
         firebase.auth().signOut();
       }}

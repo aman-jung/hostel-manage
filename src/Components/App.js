@@ -5,13 +5,18 @@ import SignupPage from "./Authentication/SignupPage";
 import LandingPage from "./Authentication/LandingPage";
 import HomePage from "./Home/Homepage";
 import Navigation from "./Authentication/Navigation";
+import NavigationWarden from "./Authentication/NavigationWarden";
 import Outpass from "./Outpass/Outpass";
+import StudentProfile from "./Outpass/StudentProfile";
 import Feeds from "./Feeds/Feeds";
 import PasswordForgetPage from "./Authentication/PasswordForgetPage";
 import ExtraInformation from "./Information/ExtraInformation";
+import NotFound from "../NotFound";
 import firebase from "firebase";
 import Warden from "./Warden/Warden";
 import Status from "./Warden/Status";
+import StudentHistory from "./Outpass/StudentHistory";
+import StudentStatus from "./Outpass/StudentStatus";
 
 class App extends Component {
   constructor(props) {
@@ -33,11 +38,23 @@ class App extends Component {
   }
 
   render() {
+    var email;
     console.log(this.state.authUser);
+    var warden = firebase.auth().currentUser;
+    if (warden) {
+      email = warden.email;
+    }
+    //const val = this.state.authUser.email;
     return (
       <BrowserRouter>
         <div>
-          <Navigation authUser={this.state.authUser} />
+          {email === "hari@warden.com" ? (
+            <NavigationWarden authUser={this.state.authUser} />
+          ) : (
+            <Navigation authUser={this.state.authUser} />
+          )}
+          {/* <Navigation authUser={this.state.authUser} />
+          <NavigationWarden authUser={this.state.authUser} /> */}
           <Route
             exact
             path="/signup"
@@ -49,16 +66,70 @@ class App extends Component {
             exact
             path="/signin"
             render={() =>
-              this.state.authUser ? <Redirect to="/home" /> : <SigninPage />
+              this.state.authUser && email !== "hari@warden.com" ? (
+                <Redirect to="/home" />
+              ) : (
+                <SigninPage />
+              )
             }
           />
-          <Route exact path="/" component={LandingPage} />
-          <Route exact path="/home" component={HomePage} />
+          {/* <Route exact path="/" component={LandingPage} /> */}
+          {/* <Route
+            exact
+            path="/home"
+            render={() =>
+              this.state.authUser ? (
+                <Redirect to="/home" />
+              ) : (
+                <Redirect to="/" />
+              )
+            }
+          /> */}
+          <Route
+            exact
+            path="/home"
+            component={HomePage}
+            user={this.state.authUser}
+          />
+          <Route
+            exact
+            path="/"
+            render={() =>
+              this.state.authUser ? <HomePage /> : <LandingPage />
+            }
+          />
+
           <Route exact path="/Outpass" component={Outpass} />
           <Route exact path="/Feeds" component={Feeds} />
           <Route exact path="/info" component={ExtraInformation} />
-          <Route exact path="/pw-forget" component={PasswordForgetPage} />
+          <Route exact path="/NotFound" component={NotFound} />
           <Route exact path="/warden" component={Warden} />
+          <Route exact path="/studentprofile" component={StudentProfile} />
+
+          <Route
+            exact
+            path="/StudentHistory"
+            component={_ => <StudentHistory user={this.state.authuser} />}
+          />
+          <Route exact path="/StudentStatus" component={StudentStatus} />
+          {/* <Route
+            exact
+            path="/info"
+            render={() =>
+            match.params ? (
+                <Redirect to="/info" />
+              ) : (
+                <ExtraInformation />
+              )
+            }
+          /> */}
+          <Route exact path="/pw-forget" component={PasswordForgetPage} />
+
+          {/* <Route
+            exact
+            path="/warden"
+            render={() => (this.state.authUser ? <Warden /> : <NotFound />)}
+          /> */}
           <Route exact path="/status" component={Status} />
         </div>
       </BrowserRouter>

@@ -10,10 +10,6 @@ const SigninPage = ({ history }) => (
   </div>
 );
 
-const byPropKey = (propertyName, value) => () => ({
-  [propertyName]: value
-});
-
 const INITIAL_STATE = {
   email: "",
   password: "",
@@ -24,10 +20,19 @@ class SignInForm extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { ...INITIAL_STATE };
+    this.state = {
+      ...INITIAL_STATE,
+      more2: []
+    };
   }
 
+  onChange = e => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
   onSubmit = event => {
+    event.preventDefault();
+    var scope = this;
+    var value;
     const { email, password } = this.state;
     var user = firebase.auth().currentUser;
     //var emailVerified = user.emailVerified;
@@ -40,49 +45,40 @@ class SignInForm extends Component {
       .auth()
       .signInWithEmailAndPassword(email, password)
       .then(() => {
-        if (email == "raunka@raunak.com") {
-          this.setState({ ...INITIAL_STATE });
+        if (email === "hari@warden.com") {
+          // this.setState({ ...INITIAL_STATE });
 
           history.push("/Warden");
         } else {
-          this.setState({ ...INITIAL_STATE });
+          firebase
+            .firestore()
+            .collection("Details")
+            .where("email", "==", email)
 
-          history.push("/home");
+            .get()
+            .then(function(querySnapshot) {
+              querySnapshot.forEach(function(doc) {
+                // console.log(doc.id, " => ", doc.data());
+                value = doc.data();
+                console.log(value);
+              });
+              console.log(value);
+              if (!value) {
+                history.push("/info");
+              } else {
+                this.setState({ ...INITIAL_STATE });
+
+                history.push("/home");
+              }
+            })
+
+            .catch(err => {
+              console.log("Error getting documents", err);
+            });
+          console.log(this.state.more2);
         }
       })
-      .catch(error => {
-        this.setState(byPropKey("error", error));
-      });
-
-    // var user = firebase.auth().currentUser;
-
-    // user
-    //   .sendEmailVerification()
-    //   .then(function() {
-    //     // E
-    //   })
-    //   .catch(function(error) {
-    //     // An error happened.
-    //   });
-
-    // firebase.auth().onAuthStateChanged(function(user) {
-    //   if (user) {
-    //     if (user.emailVerified === false) {
-    //       console.log("Sry");
-    //       // Toast.show({
-    //       //   text: "Email Not Verified!",
-    //       //   position: "bottom",
-    //       //   buttonText: "Try Again"
-    //       // });
-    //     } else {
-    //       // successful login
-    //     }
-    //   } else {
-    //
-    //   }
-    // });
-
-    event.preventDefault();
+      .catch(error => this.setState({ error }));
   };
 
   render() {
@@ -105,9 +101,7 @@ class SignInForm extends Component {
                     placeholder="Email Address"
                     name="email"
                     value={email}
-                    onChange={event =>
-                      this.setState(byPropKey("email", event.target.value))
-                    }
+                    onChange={this.onChange}
                   />
                 </div>
                 <div className="form-group">
@@ -117,9 +111,7 @@ class SignInForm extends Component {
                     placeholder="Password"
                     name="password"
                     value={password}
-                    onChange={event =>
-                      this.setState(byPropKey("password", event.target.value))
-                    }
+                    onChange={this.onChange}
                   />
                 </div>
 

@@ -6,7 +6,7 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/database";
 
-const config = {
+var config = {
   apiKey: "AIzaSyAfYCHmHZMw-xC0I9NsU2pxlYRW83GgYmM",
   authDomain: "auth-7f72c.firebaseapp.com",
   databaseURL: "https://auth-7f72c.firebaseio.com",

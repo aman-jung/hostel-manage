@@ -23,6 +23,7 @@ class Warden extends Component {
 
   componentDidMount() {
     db.collection("outpassSubmit")
+      .orderBy("createdate")
       .get()
       .then(snapshot => {
         snapshot.forEach(doc => {
@@ -52,25 +53,8 @@ class Warden extends Component {
       console.log(result.value);
       if (result.value) {
         swal("Accepted!", "The outpass is accepted.", "success");
-
-        // var data=this.state.data;
-        //   var item=data.indexOf(e);
-        //   var item1=item;
-        //   // console.log(x);
-        //   var temp=data[item1];
-        //   temp.status='1';
-        //     this.setState(state=>{
-        //       state.data=data
-        //     })
-        // this.setState({
-        //   comment:result.value,
-        // })
-        // var outpassSubmitRef=db.collection('outpasshistory');
-        // outpassSubmitRef.add({
-        // comment:this.state.comment,
-        // })
         db.collection("permission")
-          .where("usn", "==", e.usn)
+          .where("id", "==", e.id)
           .get()
           .then(function(querySnapshot) {
             querySnapshot.forEach(function(doc) {
@@ -79,6 +63,18 @@ class Warden extends Component {
                 .update({ status: "Accepted", comment: result.value });
             });
           });
+
+        db.collection("studentstatus")
+          .where("id", "==", e.id)
+          .get()
+          .then(function(querySnapshot) {
+            querySnapshot.forEach(function(doc) {
+              db.collection("studentstatus")
+                .doc(doc.id)
+                .update({ status: "Accepted", comment: result.value });
+            });
+          });
+
         this.setState({
           comment: ""
         });
@@ -126,7 +122,7 @@ class Warden extends Component {
         //   // usn:e.target.value
         // })
         db.collection("permission")
-          .where("usn", "==", e.usn)
+          .where("id", "==", e.id)
           .get()
           .then(function(querySnapshot) {
             querySnapshot.forEach(function(doc) {
@@ -135,6 +131,18 @@ class Warden extends Component {
                 .update({ status: "Rejected", comment: result.value });
             });
           });
+
+        db.collection("studentstatus")
+          .where("id", "==", e.id)
+          .get()
+          .then(function(querySnapshot) {
+            querySnapshot.forEach(function(doc) {
+              db.collection("studentstatus")
+                .doc(doc.id)
+                .update({ status: "Accepted", comment: result.value });
+            });
+          });
+
         this.setState({
           comment: ""
         });
