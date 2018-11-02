@@ -17,6 +17,7 @@ import Warden from "./Warden/Warden";
 import Status from "./Warden/Status";
 import StudentHistory from "./Outpass/StudentHistory";
 import StudentStatus from "./Outpass/StudentStatus";
+import PasswordChangeForm from "./Authentication/PasswordChangeForm";
 
 class App extends Component {
   constructor(props) {
@@ -44,7 +45,6 @@ class App extends Component {
     if (warden) {
       email = warden.email;
     }
-    //const val = this.state.authUser.email;
     return (
       <BrowserRouter>
         <div>
@@ -105,7 +105,7 @@ class App extends Component {
           <Route exact path="/NotFound" component={NotFound} />
           <Route exact path="/warden" component={Warden} />
           <Route exact path="/studentprofile" component={StudentProfile} />
-
+          <Route exact path="/pw-change" component={PasswordChangeForm} />
           <Route
             exact
             path="/StudentHistory"

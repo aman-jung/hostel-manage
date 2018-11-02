@@ -9,6 +9,7 @@ const Initial_state = {
   image: "",
   block: "",
   roomNo: "",
+  phonenum: "",
   error: ""
 };
 
@@ -64,9 +65,6 @@ class ExtraInformation extends Component {
               .catch(err => {
                 console.log("Error getting documents", err);
               });
-
-            var storageRef = firebase.storage().ref(`Photos ${image.name}`);
-            storageRef.put(image);
           } else {
             user
               .sendEmailVerification()
@@ -148,6 +146,17 @@ class ExtraInformation extends Component {
                     name="block"
                     type="text"
                     value={block}
+                    onChange={this.onChange}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <input
+                    className="form-control form-control-lg"
+                    placeholder="Phone  Number"
+                    name="phonenum"
+                    type="text"
+                    //  value={block}
                     onChange={this.onChange}
                   />
                 </div>

@@ -62,7 +62,11 @@ const NavigationAuth = () => (
             <img
               className="rounded-circle"
               style={{ width: "35px", marginRight: "5px" }}
-              src="https://www.gravatar.com/avatar/anything?s=200&d=mm"
+              src={
+                firebase.auth().currentUser
+                  ? firebase.auth().currentUser.photoURL
+                  : ""
+              }
               alt=""
               title="You must have a Gravatar connected to your email to display an image"
             />
