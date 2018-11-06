@@ -10,7 +10,9 @@ const Initial_state = {
   block: "",
   roomNo: "",
   phonenum: "",
-  error: ""
+  error: "",
+  selectValue: "",
+  selectBlock: ""
 };
 
 var db = firebase.firestore();
@@ -26,12 +28,14 @@ class ExtraInformation extends Component {
   };
   onChange = e => {
     this.setState({ [e.target.name]: e.target.value });
+    // this.setState({ selectValue: e.target.value });
+    // this.setState({ selectBlock: e.target.value });
   };
 
   onSubmit = event => {
     event.preventDefault();
     var scope = this;
-    const { usn, image, block, roomNo } = this.state;
+    const { usn, roomNo, selectValue, selectBlock } = this.state;
     const { history } = this.props;
     var user = firebase.auth().currentUser;
     var value = "";
@@ -42,7 +46,6 @@ class ExtraInformation extends Component {
       .get()
       .then(function(querySnapshot) {
         querySnapshot.forEach(function(doc) {
-          console.log(doc.id, " => ", doc.data());
           value = doc.data();
         });
         if (!value.usn) {
@@ -50,13 +53,13 @@ class ExtraInformation extends Component {
             firebase
               .firestore()
               .collection("Details")
-              // .orderBy("", timestamp)
               .add({
                 username: user.displayName,
                 usn: usn,
                 email: user.email,
-                block: block,
-                roomNo: roomNo
+                roomNo: roomNo,
+                selectValue: selectValue,
+                selectBlock: selectBlock
               })
               .then(() => {
                 scope.setState({ ...Initial_state });
@@ -82,11 +85,9 @@ class ExtraInformation extends Component {
   };
 
   render() {
-    const { usn, image, block, roomNo } = this.state;
+    const { usn, image, roomNo } = this.state;
 
     var user = firebase.auth().currentUser;
-    //console.log(user);
-
     const isInvalid = usn === "" || image === "";
     return (
       <div className="register">
@@ -102,6 +103,7 @@ class ExtraInformation extends Component {
               <p className="lead text-center">We're almost done!!</p>
               <form onSubmit={this.onSubmit}>
                 <div className="form-group">
+                  <label for="exampleFormControlSelect1">FULL NAME</label>
                   <input
                     type="text"
                     className="form-control form-control-lg"
@@ -111,6 +113,7 @@ class ExtraInformation extends Component {
                   />
                 </div>
                 <div className="form-group">
+                  <label for="exampleFormControlSelect1">EMAIL</label>
                   <input
                     type="email"
                     className="form-control form-control-lg"
@@ -120,6 +123,7 @@ class ExtraInformation extends Component {
                   />
                 </div>
                 <div className="form-group">
+                  <label for="exampleFormControlSelect1">USN</label>
                   <input
                     className="form-control form-control-lg"
                     placeholder="usn"
@@ -130,6 +134,7 @@ class ExtraInformation extends Component {
                   />
                 </div>
                 <div className="form-group">
+                  <label for="exampleFormControlSelect1">ROOM NUMBER</label>
                   <input
                     className="form-control form-control-lg"
                     placeholder="Room Number"
@@ -139,7 +144,22 @@ class ExtraInformation extends Component {
                     onChange={this.onChange}
                   />
                 </div>
-                <div className="form-group">
+                <div class="form-group">
+                  <label for="exampleFormControlSelect1">BLOCK</label>
+                  <select
+                    class="form-control"
+                    //value={selectBlock}
+                    name="selectBlock"
+                    onChange={this.onChange}
+                  >
+                    <option value="jr">Junior</option>
+                    <option value="sr">Senior</option>
+                    <option value="gr">Girls</option>
+                  </select>
+                </div>
+
+                {/* <div className="form-group">
+                  <label for="exampleFormControlSelect1">BLOCK</label>
                   <input
                     className="form-control form-control-lg"
                     placeholder="block"
@@ -148,20 +168,21 @@ class ExtraInformation extends Component {
                     value={block}
                     onChange={this.onChange}
                   />
-                </div>
+                </div> */}
 
                 <div className="form-group">
+                  <label for="exampleFormControlSelect1">PHONE NUMBER</label>
                   <input
                     className="form-control form-control-lg"
                     placeholder="Phone  Number"
                     name="phonenum"
                     type="text"
-                    //  value={block}
                     onChange={this.onChange}
                   />
                 </div>
 
                 <div className="form-group">
+                  <label for="exampleFormControlSelect1">PHOTO</label>
                   <input
                     className="form-control form-control-lg"
                     placeholder="Front Photo"
@@ -170,6 +191,19 @@ class ExtraInformation extends Component {
                     onChange={this.handleChange}
                     required
                   />
+                </div>
+                <div class="form-group">
+                  <label for="exampleFormControlSelect1">GENDER</label>
+                  <select
+                    class="form-control"
+                    // id="exampleFormControlSelect1"
+                    //value={this.state.selectValue}
+                    name="selectValue"
+                    onChange={this.onChange}
+                  >
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                  </select>
                 </div>
                 <input
                   type="submit"

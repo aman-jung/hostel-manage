@@ -256,70 +256,9 @@ class Outpass extends Component {
           });
         });
       })
-      .catch(err => {
-        console.log("Error getting documents", err);
-      });
-    //console.log(this.state.data);
+      .catch(err => {});
     return (
       <div>
-        {/* <div className="nav">
-          <div className="nav-element">
-            <div className="nav-element1">
-              <Link to="home">
-                <img
-                  src={require("../../img/ustech1.png")}
-                  alt="banner"
-                  height="80"
-                  width="80"
-                />
-              </Link>
-            </div>
-            <div className="nav-element2" />
-            <div className="nav-element3">
-              <div className="nav-element3-1">
-                <div class="dropdown-content">
-                  <hr />
-                </div>
-              </div>
-              <div className="nav-element3-2" />
-            </div>
-          </div>
-        </div> */}
-
-        {/* <div className="main">
-          <div>
-            <Link to="#">
-              <img src={require("../../img/email (2).png")} alt="banner" />
-              <p className="elements">outpass</p>
-            </Link>
-            <div className="highlighter" />
-          </div>
-          <div>
-            <Link to="Feeds">
-              <img src={require("../../img/email (2).png")} alt="banner" />
-              <p className="elements">Feeds</p>
-            </Link>
-          </div>
-          <div>
-            <Link to="#">
-              <img src={require("../../img/email (2).png")} alt="banner" />
-              <p className="elements">Status</p>
-            </Link>
-          </div>
-          <div>
-            <Link to="#">
-              <img src={require("../../img/email (2).png")} alt="banner" />
-              <p className="elements">Mess</p>
-            </Link>
-          </div>
-          <div>
-            <Link to="#">
-              <img src={require("../../img/email (2).png")} alt="banner" />
-              <p className="elements">Sports</p>
-            </Link>
-          </div>
-        </div> */}
-
         <div class="container">
           <div class="row">
             <div class="col-md-8 m-auto">
@@ -333,10 +272,9 @@ class Outpass extends Component {
                   <input
                     type="text"
                     class="form-control form-control-xs"
-                    //placeholder="* First Name"
-                    //onChange={this.onChange}
                     name={this.state.data.username}
                     value={this.state.data.username}
+                    required
                   />
                 </div>
 
@@ -344,27 +282,27 @@ class Outpass extends Component {
                   <input
                     type="text"
                     class="form-control form-control-xs"
-                    // placeholder="* USN"
                     name={this.state.data.usn}
                     value={this.state.data.usn}
+                    required
                   />{" "}
                 </div>
                 <div class="form-group">
                   <input
                     type="text"
                     class="form-control form-control-xs"
-                    // placeholder="* Block"
                     name={this.state.data.block}
                     value={this.state.data.block}
+                    required
                   />{" "}
                 </div>
                 <div class="form-group">
                   <input
                     type="text"
                     class="form-control form-control-xs"
-                    // placeholder="* Room No"
                     name={this.state.data.roomNo}
                     value={this.state.data.roomNo}
+                    required
                   />
                 </div>
                 <h6>Out Date</h6>
@@ -376,6 +314,7 @@ class Outpass extends Component {
                     onChange={this.onChange}
                     name="outdate"
                     value={this.state.outdate}
+                    required
                   />
                 </div>
                 <h6>In Date</h6>
@@ -387,6 +326,7 @@ class Outpass extends Component {
                     onChange={this.onChange}
                     name="indate"
                     value={this.state.indate}
+                    required
                   />
                 </div>
                 <h6>Out Time</h6>
@@ -399,6 +339,7 @@ class Outpass extends Component {
                     onChange={this.onChange}
                     name="outtime"
                     value={this.state.outtime}
+                    required
                   />
                 </div>
                 <h6>In Time</h6>
@@ -411,6 +352,7 @@ class Outpass extends Component {
                     onChange={this.onChange}
                     name="intime"
                     value={this.state.intime}
+                    required
                   />
                 </div>
 
@@ -421,6 +363,7 @@ class Outpass extends Component {
                     onChange={this.onChange}
                     name="purpose"
                     value={this.state.purpose}
+                    required
                   />
                 </div>
                 <input type="submit" class="btn btn-info btn-block mt-4" />

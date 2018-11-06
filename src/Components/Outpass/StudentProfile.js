@@ -1,12 +1,9 @@
 import React, { Component } from "react";
-//import "./App.css";
 import { Link } from "react-router-dom";
 import firebase from "firebase";
 import swal from "sweetalert2";
 
 var db = firebase.firestore();
-// var current = "";
-// var uid1 = "";
 const storage = firebase.storage().ref();
 class StudentProfile extends Component {
   constructor(props) {
@@ -14,9 +11,7 @@ class StudentProfile extends Component {
     this.state = {
       data: [],
       search: ""
-      //profile: ""
     };
-    //this.getImage("profile");
     this.request = this.request.bind(this);
   }
   componentDidMount() {
@@ -24,79 +19,13 @@ class StudentProfile extends Component {
     let ref = firebase
       .storage()
       .refFromURL("gs://auth-7f72c.appspot.com/7vzUjBa775bS2hw8T2z4ln3Gm7h1");
-    //console.log(ref);
     ref
       .getDownloadURL()
       .then(function(url) {
         console.log(url);
       })
-      .catch(err => {
-        // ...
-      });
-    //   var scope =  this;
-    //     // console.log(this.data.state.historyTable)
-    //     current = firebase.auth().currentUser;
-    //     // console.log(current);
-    //    if (current) {
-    //      uid1 = current.email;
-    //    console.log(uid1);
-    //    } else {
-    //      console.log("data empty");
-    //    }
-    //      db.collection("studentstatus").where("email", "==", uid1)
-    //      .get()
-    //      .then(snapshot => {
-    //        snapshot.forEach(doc => {
-    //         console.log(doc.id, "=>", doc.data());
-    //          scope.setState({
-    //            statusTable: this.state.statusTable.concat(doc.data())
-    //          });
-    //          console.log(this.state.statusTable)
-    //        });
-    //      })
-    //      .catch(err => {
-    //        console.log("Error getting documents", err);
-    //      });
-    // const images = firebase
-    //   .storage()
-    //   .ref()
-    //   .child("Photos");
-    // const image = images.child("image");
-    // image.getDownloadURL().then(url => console.log(url));
+      .catch(err => {});
   }
-
-  getImage = () => {
-    // firebase.auth().onAuthStateChanged(user => {
-    //   if (user) {
-    //     console.log(user.uid);
-    //   }
-    // });
-    // let ref = firebase
-    //   .storage()
-    //   .refFromURL("gs://auth-7f72c.appspot.com/7vzUjBa775bS2hw8T2z4ln3Gm7h1");
-    // console.log(ref);
-    // ref
-    //   .getDownloadURL()
-    //   .then(function(url) {
-    //     console.log(url);
-    //   })
-    //   .catch(err => {
-    //     // ...
-    //   });
-    // let { state } = this;
-    // storage
-    //   .child(`${image}/jpg`)
-    //   .getDownloadURL()
-    //   .then(url => {
-    //     state[image] = url;
-    //     this.setState(state);
-    //     console.log(state);
-    //   })
-    //   .catch(error => {
-    //     console.log(error);
-    //     // Handle any errors
-    //   });
-  };
 
   request(e) {
     swal({
@@ -108,22 +37,6 @@ class StudentProfile extends Component {
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, accept it!"
     });
-    // .then(result => {
-    //   console.log(result.value);
-    //   if (result.value) {
-    //     swal("Accepted!", "The outpass is accepted.", "success");
-    // db.collection("permission")
-    //   .where("id", "==", e.id)
-    //   .get()
-    //   .then(function(querySnapshot) {
-    //     querySnapshot.forEach(function(doc) {
-    //       db.collection("permission")
-    //         .doc(doc.id)
-    //         .update({ status: "Accepted", comment: result.value });
-    //     });
-    //   });
-    // }
-    // });
   }
 
   render() {
@@ -132,13 +45,9 @@ class StudentProfile extends Component {
     var db = firebase.firestore();
     var current = firebase.auth().currentUser;
     var uid1 = "";
-    //var image = "";
     if (current) {
       uid1 = current.email;
-      //image = current.photoURL;
-      //console.log(image);
     } else {
-      //console.log("data empty");
     }
 
     db.collection("Details")
@@ -146,10 +55,6 @@ class StudentProfile extends Component {
       .get()
       .then(function(querySnapshot) {
         querySnapshot.forEach(function(doc) {
-          //console.log(doc.id, " => ", doc.data());
-          //value = doc.data();
-          //console.log(value);
-
           scope.setState({
             data: doc.data()
           });
@@ -194,18 +99,6 @@ class StudentProfile extends Component {
                   <a className="text-white p-2" href="#">
                     <i className="fas fa-edit fa-2x" />
                   </a>
-                  {/* <a class="text-white p-2" href="#">
-                    <i class="fab fa-twitter fa-2x" />
-                  </a>
-                  <a class="text-white p-2" href="#">
-                    <i class="fab fa-facebook fa-2x" />
-                  </a>
-                  <a class="text-white p-2" href="#">
-                    <i class="fab fa-linkedin fa-2x" />
-                  </a>
-                  <a class="text-white p-2" href="#">
-                    <i class="fab fa-instagram fa-2x" />
-                  </a> */}
                 </p>
               </div>
             </div>
@@ -236,11 +129,15 @@ class StudentProfile extends Component {
             <ul class="list-group">
               <li class="list-group-item">
                 <h4>Hostel Block</h4>
-                <p>{this.state.data.block}</p>
+                <p>{this.state.data.selectBlock}</p>
                 <p>
                   <strong>Room Number: </strong>
 
                   {this.state.data.roomNo}
+                </p>
+                <p>
+                  <strong>Gender: </strong>
+                  {this.state.data.selectValue}
                 </p>
                 <p>
                   <strong>Year:</strong> 1st year
@@ -278,25 +175,7 @@ class StudentProfile extends Component {
         </div>
 
         <div class="row">
-          <div class="col-md-6">
-            {/* <h3 class="text-center text-info">Experience</h3>
-            <ul class="list-group">
-              <li class="list-group-item">
-                <h4>Microsoft</h4>
-                <p>Oct 2011 - Current</p>
-                <p>
-                  <strong>Position:</strong> Senior Developer
-                </p>
-                <p>
-                  <strong>Description:</strong> Lorem ipsum dolor sit amet
-                  consectetur adipisicing elit. Unde doloribus dicta enim
-                  excepturi laborum voluptatem nam provident quisquam facere.
-                  Quae?
-                </p>
-              </li>
-              
-            </ul> */}
-          </div>
+          <div class="col-md-6" />
         </div>
       </div>
     );

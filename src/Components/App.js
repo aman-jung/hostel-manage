@@ -53,8 +53,7 @@ class App extends Component {
           ) : (
             <Navigation authUser={this.state.authUser} />
           )}
-          {/* <Navigation authUser={this.state.authUser} />
-          <NavigationWarden authUser={this.state.authUser} /> */}
+
           <Route
             exact
             path="/signup"
@@ -73,18 +72,6 @@ class App extends Component {
               )
             }
           />
-          {/* <Route exact path="/" component={LandingPage} /> */}
-          {/* <Route
-            exact
-            path="/home"
-            render={() =>
-              this.state.authUser ? (
-                <Redirect to="/home" />
-              ) : (
-                <Redirect to="/" />
-              )
-            }
-          /> */}
           <Route
             exact
             path="/home"
@@ -112,24 +99,8 @@ class App extends Component {
             component={_ => <StudentHistory user={this.state.authuser} />}
           />
           <Route exact path="/StudentStatus" component={StudentStatus} />
-          {/* <Route
-            exact
-            path="/info"
-            render={() =>
-            match.params ? (
-                <Redirect to="/info" />
-              ) : (
-                <ExtraInformation />
-              )
-            }
-          /> */}
           <Route exact path="/pw-forget" component={PasswordForgetPage} />
 
-          {/* <Route
-            exact
-            path="/warden"
-            render={() => (this.state.authUser ? <Warden /> : <NotFound />)}
-          /> */}
           <Route exact path="/status" component={Status} />
         </div>
       </BrowserRouter>
